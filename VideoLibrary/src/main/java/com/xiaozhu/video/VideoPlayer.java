@@ -191,6 +191,7 @@ public class VideoPlayer extends FrameLayout implements VideoPlayerInterface, Te
             mMediaPlayer.start();
             mCurrentState = STATE_PLAYING;
             mController.onPlayStateChanged(mCurrentState);
+            if (playVideoCallbackListener != null) playVideoCallbackListener.onPlaying();
         } else if (mCurrentState == STATE_BUFFERING_PAUSED) {
             mMediaPlayer.start();
             mCurrentState = STATE_BUFFERING_PLAYING;
@@ -477,6 +478,7 @@ public class VideoPlayer extends FrameLayout implements VideoPlayerInterface, Te
                 // 播放器开始渲染
                 mCurrentState = STATE_PLAYING;
                 mController.onPlayStateChanged(mCurrentState);
+                if (playVideoCallbackListener != null) playVideoCallbackListener.onPlaying();
             } else if (what == IMediaPlayer.MEDIA_INFO_BUFFERING_START) {
                 // MediaPlayer暂时不播放，以缓冲更多的数据
                 if (mCurrentState == STATE_PAUSED || mCurrentState == STATE_BUFFERING_PAUSED) {
@@ -490,6 +492,7 @@ public class VideoPlayer extends FrameLayout implements VideoPlayerInterface, Te
                 if (mCurrentState == STATE_BUFFERING_PLAYING) {
                     mCurrentState = STATE_PLAYING;
                     mController.onPlayStateChanged(mCurrentState);
+                    if (playVideoCallbackListener != null) playVideoCallbackListener.onPlaying();
                 }
                 if (mCurrentState == STATE_BUFFERING_PAUSED) {
                     mCurrentState = STATE_PAUSED;
@@ -642,6 +645,8 @@ public class VideoPlayer extends FrameLayout implements VideoPlayerInterface, Te
     }
 
     public interface PlayVideoCallbackListener {
+        void onPlaying();
+
         void onPlayCompletion();
     }
 }
